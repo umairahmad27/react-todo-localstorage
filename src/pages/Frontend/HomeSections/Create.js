@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Select from 'react-select';
 import cities from "../../../data/cities.json"
+import Read from './Read';
 
 const initialState = {
     title: "",
@@ -11,12 +12,19 @@ const initialState = {
 export default function Create() {
 
     const [state, setState] = useState(initialState)
+    const [todos, setTodos] = useState([])
 
     const handleChange = e => {
         let { name, value } = e.target
         value = value.trim()
         setState(s => ({ ...s, [name]: value }))
     }
+
+    useEffect(() => {
+        const todos = JSON.parse(localStorage.getItem("todos")) || []
+
+        setTodos(todos)
+    }, [])
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -47,11 +55,13 @@ export default function Create() {
         let todos = JSON.parse(localStorage.getItem("todos")) || []
 
         todos.push(todo)
+        setTodos(todos)
 
         localStorage.setItem("todos", JSON.stringify(todos))
+        window.toastify("A new todo has been added", "success")
     }
 
-    return (
+    return (<>
         <div className='create py-5 bg-light'>
             <div className="container">
                 <div className="row mb-5">
@@ -98,5 +108,7 @@ export default function Create() {
                 </div>
             </div>
         </div>
+        <Read todos={todos} />
+    </>
     )
 }
