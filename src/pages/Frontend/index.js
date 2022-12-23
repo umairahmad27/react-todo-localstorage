@@ -13,6 +13,7 @@ export default function Index() {
             <main>
                 <Routes>
                     <Route path='/' element={<Home />} />
+                    <Route path='*' element={<h1 className='text-center'>Page Not Found!</h1>} />
                 </Routes>
             </main>
             <Footer />
